@@ -1,9 +1,9 @@
 from i2c.I2CBase import I2CBase
 
 class HandlerBase(object):
-    def __init__(self, action: dict, mandatoryKeys: list[str], i2c: I2CBase, defaultDelay: int = 0) -> None:
+    def __init__(self, action: dict, mandatoryKeys: list[str], i2c: I2CBase, defaultDelay: float = 0) -> None:
         self.mandatoryKeys = mandatoryKeys
-        self.checkKeys()
+        self.checkKeys(action)
         self.action = action
         self.name = action['action']
         self.addr = int(action['address'], base=16) if 'address' in action \
@@ -11,7 +11,7 @@ class HandlerBase(object):
         self.i2c = i2c
         self.delay = defaultDelay
         if 'delay' in action:
-            self.delay = action['delay']
+            self.delay = action['delay'] / 1000
 
     def handle(self):
         raise NotImplementedError

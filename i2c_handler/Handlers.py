@@ -1,9 +1,9 @@
-from HandlerBase import HandlerBase
+from .HandlerBase import HandlerBase
 from i2c.I2CBase import I2CBase
 import time
 
 class HandleScan(HandlerBase):
-    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: int = 0) -> None:
+    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: float = 0) -> None:
         super().__init__(action, ['action'], i2c, defaultDelay)
     
     def handle(self):
@@ -12,7 +12,7 @@ class HandleScan(HandlerBase):
         time.sleep(self.delay)
         
 class HandleCheck(HandlerBase):
-    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: int = 0) -> None:
+    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: float = 0) -> None:
         super().__init__(action, ['action'], i2c, defaultDelay)
     
     def handle(self):
@@ -21,7 +21,7 @@ class HandleCheck(HandlerBase):
         time.sleep(self.delay)
         
 class HandleWrite(HandlerBase):
-    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: int = 0) -> None:
+    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: float = 0) -> None:
         super().__init__(action, ['action', 'data'], i2c, defaultDelay)
     
     def handle(self):
@@ -30,7 +30,7 @@ class HandleWrite(HandlerBase):
         time.sleep(self.delay)
         
 class HandleRead(HandlerBase):
-    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: int = 0) -> None:
+    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: float = 0) -> None:
         super().__init__(action, ['action', 'bytes_to_read'], i2c, defaultDelay)
     
     def handle(self):
@@ -39,7 +39,7 @@ class HandleRead(HandlerBase):
         time.sleep(self.delay)
         
 class HandleWriteThenRead(HandlerBase):
-    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: int = 0) -> None:
+    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: float = 0) -> None:
         super().__init__(action, ['action', 'data', 'bytes_to_read'], i2c, defaultDelay)
     
     def handle(self):
@@ -48,16 +48,17 @@ class HandleWriteThenRead(HandlerBase):
         time.sleep(self.delay)
         
 class HandleRepeat(HandlerBase):
-    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: int = 0) -> None:
-        super().__init__(action, ['action', 'repeat_action', 'times'], i2c, defaultDelay)
+    def __init__(self, action: dict, i2c: I2CBase, defaultDelay: float = 0) -> None:
+        super().__init__(action, ['action', 'steps', 'times'], i2c, defaultDelay)
     
-    def handle(self, factoryFunc: function[dict, I2CBase, int]):
+    def handle(self, factoryFunc):
         self.printLogMessage()
         
         for i in range(self.action['times']):
-            factoryFunc(self.action, self.i2c, self.delay)
+            for step in self.action['steps']:
+                factoryFunc(step, self.i2c, self.delay)
         
-def HandlerFactory(action: dict, i2c: I2CBase, defaultDelay: int = 0):
+def HandlerFactory(action: dict, i2c: I2CBase, defaultDelay: float = 0):
     actionType = action['action']
     
     if actionType == 'SCAN':
@@ -71,4 +72,4 @@ def HandlerFactory(action: dict, i2c: I2CBase, defaultDelay: int = 0):
     elif actionType == 'WRITE_THEN_READ':
         HandleWriteThenRead(action, i2c, defaultDelay).handle()
     elif actionType == 'REPEAT':
-        HandleRepeat(action, i2c, defaultDelay).handle()
+        HandleRepeat(action, i2c, defaultDelay).handle(HandlerFactory)

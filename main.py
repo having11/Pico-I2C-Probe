@@ -1,5 +1,5 @@
 import json
-from i2c.I2CPico import I2CPico
+from i2c.I2CSim import I2CSim
 from i2c_handler.Handlers import HandlerFactory
 
 actionsPath = './actions.json'
@@ -12,9 +12,9 @@ def main():
         delay = config['default_delay'] / 1000 if 'default_delay' in config else 0
         busSpeed = config['bus_speed'] if 'bus_speed' in config else 100000
         
-        i2c = I2CPico(address, busSpeed)
+        i2c = I2CSim(address, busSpeed)
         
         for step in schema['steps']:
             HandlerFactory(step, i2c, delay)
-
+        
 main()
