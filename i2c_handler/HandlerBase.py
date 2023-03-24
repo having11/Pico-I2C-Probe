@@ -6,7 +6,7 @@ class HandlerBase(object):
         self.checkKeys(action)
         self.action = action
         self.name = action['action']
-        self.addr = int(action['address'], base=16) if 'address' in action \
+        self.addr = int(action['address'], 16) if 'address' in action \
             else None
         self.i2c = i2c
         self.delay = defaultDelay
