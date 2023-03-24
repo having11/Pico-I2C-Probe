@@ -146,9 +146,10 @@ The second key is `steps`, and it is an `array` that contains a list of `action`
 
 ##### Repeat
 
-| Key             |   Type   |   Value    | Optional | Description                                          |
-| :-------------- | :------: | :--------: | :------: | :--------------------------------------------------- |
-| `action`        | `string` | `"REPEAT"` |    No    | Repeat the action `n` number of times                |
-| `repeat_action` | `action` |            |    No    | An action                                            |
-| `times`         | `number` |            |    No    | Number of times to repeat `repeat_action`            |
-| `log_message`   | `string` |            |   Yes    | Print message to terminal before execution of action |
+| Key             |   Type   |    Value    | Optional | Description                                          |
+| :-------------- | :------: | :---------: | :------: | :--------------------------------------------------- |
+| `action`        | `string` | `"REPEAT"`  |    No    | Repeat the action `n` number of times                |
+| `repeat_action` | `action` |             |    No    | An action                                            |
+| `times`         | `number` |             |    No    | Number of times to repeat `repeat_action`            |
+| `delay`         | `number` | Delay in ms |   Yes    | Delay after each action                              |
+| `log_message`   | `string` |             |   Yes    | Print message to terminal before execution of action |
