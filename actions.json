@@ -1,0 +1,42 @@
+{
+    "config":
+    {
+        "bus_speed": 100000,
+        "default_address": "0x02",
+        "default_delay": 5
+    },
+    "steps":
+    [
+        {
+            "action": "WRITE",
+            "data": [2, 3, 50],
+            "delay": 10
+        },
+        {
+            "action": "REPEAT",
+            "times": 10,
+            "delay": 20,
+            "steps":
+            [
+                {
+                    "action": "READ",
+                    "bytes_to_read": 1
+                },
+                {
+                    "action": "CHECK_ADDR",
+                    "address": "0xa2"
+                }
+            ]
+        },
+        {
+            "action": "WRITE_THEN_READ",
+            "data": [10],
+            "bytes_to_read": 1
+        },
+        {
+            "action": "WRITE",
+            "address": "0x1f",
+            "data": [23, 255]
+        }
+    ]
+}

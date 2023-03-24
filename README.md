@@ -35,11 +35,11 @@ The Pico I2C Probe is a simple device meant for testing an I2C bus with various 
 
 ### USB
 
-An interactive, imperative CLI that lets users execute specific actions over USB.
+An interactive, imperative CLI that lets users execute specific actions over USB. :warning: Not implemented!
 
 ### JSON
 
-A JSON file can be dropped to the Pico from a host device which executes each command in order and prints the results to the terminal over USB.
+A JSON file with the name of `actions.json` can be dropped to the Pico from a host device which executes each command in order and prints the results to the terminal over USB.
 
 #### Sample schema
 
@@ -62,11 +62,17 @@ A JSON file can be dropped to the Pico from a host device which executes each co
             "action": "REPEAT",
             "times": 10,
             "delay": 20,
-            "repeat_action":
-            {
-                "action": "READ",
-                "bytes_to_read": ""
-            }
+            "steps":
+            [
+                {
+                    "action": "READ",
+                    "bytes_to_read": 1
+                },
+                {
+                    "action": "CHECK_ADDR",
+                    "address": "0xa2"
+                }
+            ]
         },
         {
             "action": "WRITE_THEN_READ",
@@ -146,9 +152,10 @@ The second key is `steps`, and it is an `array` that contains a list of `action`
 
 ##### Repeat
 
-| Key             |   Type   |   Value    | Optional | Description                                          |
-| :-------------- | :------: | :--------: | :------: | :--------------------------------------------------- |
-| `action`        | `string` | `"REPEAT"` |    No    | Repeat the action `n` number of times                |
-| `repeat_action` | `action` |            |    No    | An action                                            |
-| `times`         | `number` |            |    No    | Number of times to repeat `repeat_action`            |
-| `log_message`   | `string` |            |   Yes    | Print message to terminal before execution of action |
+| Key           |        Type         |    Value    | Optional | Description                                          |
+| :------------ | :-----------------: | :---------: | :------: | :--------------------------------------------------- |
+| `action`      |      `string`       | `"REPEAT"`  |    No    | Repeat the action `n` number of times                |
+| `steps`       | `array` of `action` |             |    No    | List of actions to repeat                            |
+| `times`       |      `number`       |             |    No    | Number of times to repeat `repeat_action`            |
+| `delay`       |      `number`       | Delay in ms |   Yes    | Delay after each action                              |
+| `log_message` |      `string`       |             |   Yes    | Print message to terminal before execution of action |
