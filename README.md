@@ -33,6 +33,8 @@ The Pico I2C Probe is a simple device meant for testing an I2C bus with various 
 
 ## The interface
 
+All I2C communication occurs on pins `GP4 (SDA)`  and `GP5 (SCL)`. Ensure there is a pullup resistor on each of the two lines.
+
 ### USB
 
 An interactive, imperative CLI that lets users execute specific actions over USB. :warning: Not implemented!

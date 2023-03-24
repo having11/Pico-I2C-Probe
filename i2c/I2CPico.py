@@ -5,7 +5,7 @@ import busio
 class I2CPico(I2CBase):
     def __init__(self, defaultAddress: int = None, defaultBusSpeed: int = 100000) -> None:
         super().__init__(defaultAddress)
-        self.i2c = busio.I2C(board.SCL0, board.SDA0, defaultBusSpeed)
+        self.i2c = busio.I2C(board.GP5, board.GP4, frequency=defaultBusSpeed)
         while not self.i2c.try_lock():
             pass
 
